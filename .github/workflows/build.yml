@@ -23,6 +23,8 @@ jobs:
         run: git config --global user.email "info@theunrealzaka.me" && git config --global user.name "TheUnrealZaka"
       - name: Apply Patches
         run: ./gradlew applyPatches
+     - name: List files after changes
+        run: ls -la
       - name: Commit changes
         run: |
           git add .
