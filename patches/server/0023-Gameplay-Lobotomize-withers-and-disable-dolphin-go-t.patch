@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: TheUnrealZaka <info@theunrealzaka.me>
+Date: Tue, 10 Sep 2024 15:19:30 +0000
+Subject: [PATCH] [Gameplay]: Lobotomize withers and disable dolphin go to
+ treasures
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/animal/Dolphin.java b/src/main/java/net/minecraft/world/entity/animal/Dolphin.java
+index 45646c69ea73936a8916756fde37dd3f39db0d04..483e1eb59906f8f80e228a5a0dc75b689fb13088 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/Dolphin.java
++++ b/src/main/java/net/minecraft/world/entity/animal/Dolphin.java
+@@ -160,7 +160,6 @@ public class Dolphin extends WaterAnimal {
+     protected void registerGoals() {
+         this.goalSelector.addGoal(0, new BreathAirGoal(this));
+         this.goalSelector.addGoal(0, new TryFindWaterGoal(this));
+-        this.goalSelector.addGoal(1, new Dolphin.DolphinSwimToTreasureGoal(this));
+         this.goalSelector.addGoal(2, new Dolphin.DolphinSwimWithPlayerGoal(this, 4.0D));
+         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 10));
+         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+diff --git a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java b/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
+index 12440ee2dccc0a697fb403765f2e1b987ccc0283..26351ab7964b9ff684018b3518037cf3cf66605d 100644
+--- a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
++++ b/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
+@@ -117,8 +117,8 @@ public class WitherBoss extends Monster implements PowerableMob, RangedAttackMob
+         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+         this.targetSelector.addGoal(1, new HurtByTargetGoal(this, new Class[0]));
+-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, false, false, WitherBoss.LIVING_ENTITY_SELECTOR));
+-    }
++        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, net.minecraft.world.entity.Mob.class, 0, false, false, WitherBoss.LIVING_ENTITY_SELECTOR));
++        }
+ 
+     @Override
+     protected void defineSynchedData() {

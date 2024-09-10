@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: TheUnrealZaka <info@theunrealzaka.me>
+Date: Tue, 10 Sep 2024 15:03:12 +0000
+Subject: [PATCH] Optimize getNearestPlayer for high player count
+
+
+diff --git a/src/main/java/net/minecraft/world/level/EntityGetter.java b/src/main/java/net/minecraft/world/level/EntityGetter.java
+index 6d32805ae04a83638603c6b3350092a43c4c4884..1dbc9dc49f617debbf7809715824795c33c63d93 100644
+--- a/src/main/java/net/minecraft/world/level/EntityGetter.java
++++ b/src/main/java/net/minecraft/world/level/EntityGetter.java
+@@ -137,9 +137,9 @@ public interface EntityGetter {
+         Player player = null;
+ 
+         for (Player player2 : this.getLocalPlayers()) { // Folia - region threading
+-            if (targetPredicate == null || targetPredicate.test(player2)) {
++            if (true) { // Folia
+                 double e = player2.distanceToSqr(x, y, z);
+-                if ((maxDistance < 0.0 || e < maxDistance * maxDistance) && (d == -1.0 || e < d)) {
++                if ((maxDistance < 0.0D || e < maxDistance * maxDistance) && (d == -1.0D || e < d) && (targetPredicate == null || targetPredicate.test(player2))) { // Folia
+                     d = e;
+                     player = player2;
+                 }
+@@ -244,13 +244,14 @@ public interface EntityGetter {
+             double e = livingEntity2.distanceToSqr(x, y, z);
+             if (d == -1.0 || e < d) {
+             // Paper end - move up
+-            if (targetPredicate.test(entity, livingEntity2)) {
+-                // Paper - optimise nearby player retrieval; move up
++            if (true) {
++                if ((d == -1.0D || e < d) && targetPredicate.test(entity, livingEntity2)) {
+                     d = e;
+                     livingEntity = livingEntity2;
+                 }
+             }
+         }
++    }
+ 
+         return livingEntity;
+     }

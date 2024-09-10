@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: TheUnrealZaka <info@theunrealzaka.me>
+Date: Sat, 7 Sep 2024 11:46:13 +0000
+Subject: [PATCH] Make plugins synchronized
+
+
+diff --git a/src/main/java/io/papermc/paper/plugin/manager/PaperEventManager.java b/src/main/java/io/papermc/paper/plugin/manager/PaperEventManager.java
+index 7ce9ebba8ce304d1f3f21d4f15ee5f3560d7700b..5911592a1b32e24e74ad5f07589c182c9d71d4cc 100644
+--- a/src/main/java/io/papermc/paper/plugin/manager/PaperEventManager.java
++++ b/src/main/java/io/papermc/paper/plugin/manager/PaperEventManager.java
+@@ -29,6 +29,7 @@ import java.util.logging.Level;
+ class PaperEventManager {
+ 
+     private final Server server;
++    public static final Object lock = new Object(); // Folia
+ 
+     public PaperEventManager(Server server) {
+         this.server = server;
+@@ -51,7 +52,9 @@ class PaperEventManager {
+             }
+ 
+             try {
+-                registration.callEvent(event);
++                synchronized (lock) { // Folia - never run plugins async
++                  registration.callEvent(event);
++                }
+             } catch (AuthorNagException ex) {
+                 Plugin plugin = registration.getPlugin();
+ 

@@ -1,0 +1,54 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: TheUnrealZaka <info@theunrealzaka.me>
+Date: Tue, 10 Sep 2024 15:34:44 +0000
+Subject: [PATCH] Optimization tickBlockEntities don't initialize toRe and
+ Exploit Prevent teleportAccept prediction to fight f
+
+
+diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index e7b510dee355a9865bd67f5aea52c62957226eb3..4e7f7d46acae83af53b7aa9ab55d3f0127c20736 100644
+--- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -1795,6 +1795,7 @@ public class ServerGamePacketListenerImpl extends ServerCommonPacketListenerImpl
+         float f3 = set.contains(RelativeMovement.X_ROT) ? this.player.getXRot() : 0.0F;
+ 
+         this.awaitingPositionFromClient = new Vec3(d0, d1, d2);
++        this.awaitingTeleport += java.util.concurrent.ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE - 2); // Folia - prevent teleportAccept-based flight exploits
+         if (++this.awaitingTeleport == Integer.MAX_VALUE) {
+             this.awaitingTeleport = 0;
+         }
+diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
+index 3cd8573db9dadb2e32f3c107f4812b525db014b1..dbe504d4be696c26e4104f76739a7517517972e1 100644
+--- a/src/main/java/net/minecraft/world/level/Level.java
++++ b/src/main/java/net/minecraft/world/level/Level.java
+@@ -1334,13 +1334,19 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+         boolean flag = this.tickRateManager().runsNormally();
+ 
+         int tilesThisCycle = 0;
+-        var toRemove = new it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet<TickingBlockEntity>(); // Paper - Fix MC-117075; use removeAll
+-        toRemove.add(null); // Paper - Fix MC-117075
++        it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet<TickingBlockEntity> toRemove = null; // Folia - lazy initialization
+         for (int i = 0; i < blockEntityTickers.size(); i++) { // Paper - Disable tick limiters // Folia - regionised ticking
+             TickingBlockEntity tickingblockentity = (TickingBlockEntity) blockEntityTickers.get(i); // Folia - regionised ticking
+             // Spigot end
+ 
+             if (tickingblockentity.isRemoved()) {
++                // Folia start
++                if (toRemove == null) {
++                    toRemove = new it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet<TickingBlockEntity>(); // Paper - use removeAll
++                    toRemove.add(null);
++                }
++                // Folia end
++                
+                 // Spigot start
+                 tilesThisCycle--;
+                 toRemove.add(tickingblockentity); // Paper - Fix MC-117075; use removeAll
+@@ -1354,7 +1360,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+                 // Paper end - execute chunk tasks during tick
+             }
+         }
+-        blockEntityTickers.removeAll(toRemove); // Paper - Fix MC-117075 // Folia - regionised ticking
++        if (toRemove != null) blockEntityTickers.removeAll(toRemove); // Paper - Fix MC-117075 // Folia - regionised ticking
+         } finally { profiler.stopTimer(ca.spottedleaf.leafprofiler.LProfilerRegistry.TILE_ENTITY_TICK); } // Folia - profiler
+ 
+         this.timings.tileEntityTick.stopTiming(); // Spigot
