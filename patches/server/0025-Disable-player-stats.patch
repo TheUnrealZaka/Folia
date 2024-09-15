@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: TheUnrealZaka <info@theunrealzaka.me>
+Date: Sun, 15 Sep 2024 12:54:38 +0000
+Subject: [PATCH] Disable player stats
+
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index 9d7837f90340a96edbd544826ae2241c61ae72c4..c103f5535743ee210b72aa94e28b851d28f8e8e5 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -2252,10 +2252,7 @@ public class ServerPlayer extends Player {
+ 
+     @Override
+     public void awardStat(Stat<?> stat, int amount) {
+-        this.stats.increment(this, stat, amount);
+-        this.level().getCraftServer().getScoreboardManager().forAllObjectives(stat, this, (scoreaccess) -> {
+-            scoreaccess.add(amount);
+-        });
++        return; // Disable player stats - Folia
+     }
+ 
+     @Override

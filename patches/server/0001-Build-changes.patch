@@ -93,7 +93,7 @@ index 9d687da5bdf398bb3f6c84cdf1249a7213d09f2e..e2f704c115fd6e00960bb56bb0779f11
              ).openBufferedStream()) {
                  JsonObject json = new Gson().fromJson(reader, JsonObject.class);
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 2dc07e5ef249636e85ad9c78e3729e9e066a8fe8..6c42592bfaf85f23f7ff9966d7869aa0237f59c5 100644
+index 2dc07e5ef249636e85ad9c78e3729e9e066a8fe8..086917670a12ebc08847ffa4bc2ab32b3eb7a721 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1865,7 +1865,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -101,12 +101,12 @@ index 2dc07e5ef249636e85ad9c78e3729e9e066a8fe8..6c42592bfaf85f23f7ff9966d7869aa0
      @DontObfuscate
      public String getServerModName() {
 -        return "Paper"; // Paper
-+        return "Folia"; // Paper // Folia - Folia
++        return "2b2t Argentina"; // Paper // Folia - Folia
      }
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index c490a29bcf7410bc54959ee71375605964379ed5..b63effd92be5a8a75db6c37e5a1b91541020ec75 100644
+index c490a29bcf7410bc54959ee71375605964379ed5..472f51d5bccfee29607249f8a38b53c3a14f60c0 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -266,7 +266,7 @@ import javax.annotation.Nullable; // Paper
@@ -114,7 +114,7 @@ index c490a29bcf7410bc54959ee71375605964379ed5..b63effd92be5a8a75db6c37e5a1b9154
  
  public final class CraftServer implements Server {
 -    private final String serverName = "Paper"; // Paper
-+    private final String serverName = "Folia"; // Folia // Paper
++    private final String serverName = "2b2t Argentina"; // Folia // Paper
      private final String serverVersion;
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");

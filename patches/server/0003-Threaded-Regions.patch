@@ -10078,7 +10078,7 @@ index 83302c252f54481f239522e5c6861ccfe233070a..1192503d2729b3f14aa2936c2060df98
          }
      }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 6c42592bfaf85f23f7ff9966d7869aa0237f59c5..4e94de4a3184fd36119bf39beccff62ac561c1e4 100644
+index 086917670a12ebc08847ffa4bc2ab32b3eb7a721..697406b707aa99a187775311b2ee4ad328b2690e 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -203,7 +203,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -21815,7 +21815,7 @@ index 7a69564572357a7acc043e35b9c113beeb738951..f71661ef4250d3b668fffeea7cd74a28
          LevelChunkTicks<T> levelChunkTicks = this.allContainers.get(l);
          if (levelChunkTicks == null) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index b63effd92be5a8a75db6c37e5a1b91541020ec75..350fc61fd709453a86c9f7f6e4bccc434065cc35 100644
+index 472f51d5bccfee29607249f8a38b53c3a14f60c0..baa9c3d3eabaa5056d2ec67e6827da8dc181e987 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -309,7 +309,7 @@ public final class CraftServer implements Server {
