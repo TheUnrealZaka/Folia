@@ -24,11 +24,8 @@ jobs:
         run: ./gradlew applyPatches
       - name: Build
         run: ./gradlew build
-      - name: Upload jar
-        uses: actions/upload-artifact@v3
-        with:
-          name: Folia
-          path: build/libs/*
+      - name: Run createMojmapPaperclipJar
+        run: ./gradlew createMojmapPaperclipJar
       - name: Release (latest)
         if: github.ref_name == env.branch
         uses: marvinpinto/action-automatic-releases@latest
@@ -36,7 +33,7 @@ jobs:
           title: "Build #${{ env.workflow }}"
           automatic_release_tag: latest-${{ env.version }}
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          files: build/libs/*.jar
+          files: build/libs/*
           prerelease: false
       - name: Release (History)
         if: github.ref_name == env.branch
@@ -45,5 +42,10 @@ jobs:
           title: "Build #${{ env.workflow }}"
           automatic_release_tag: build-${{ env.workflow }}
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          files: build/libs/*.jar
+          files: build/libs/*
           prerelease: false
+      - name: Upload jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: Folia
+          path: build/libs/*
