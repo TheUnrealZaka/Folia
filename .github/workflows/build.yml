@@ -2,13 +2,9 @@ name: Patch and Build
 
 on:
   push:
-    branches: [ "**" ]
-  pull_request:
-
+    branches: [ "ver/1.20.4" ]
 jobs:
   build:
-    # Only run on PRs if the source branch is on someone else's repo
-    if: ${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Git Repository
@@ -21,10 +17,35 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
       - name: Configure Git User Details
-        run: git config --global user.email "actions@github.com" && git config --global user.name "Github Actions"
+        run: git config --global user.email "info@theunrealzaka.me" && git config --global user.name "TheUnrealZaka"
       - name: Apply Patches
         run: ./gradlew applyPatches
       - name: Build
         run: ./gradlew build
+      - name: Run createMojmapPaperclipJar
+        run: ./gradlew createMojmapPaperclipJar
+      - name: Release (latest)
+        if: github.ref_name == env.branch
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          title: "Build #${{ env.workflow }}"
+          automatic_release_tag: latest-${{ env.version }}
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          files: build/libs/*
+          prerelease: false
+      - name: Release (History)
+        if: github.ref_name == env.branch
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          title: "Build #${{ env.workflow }}"
+          automatic_release_tag: build-${{ env.workflow }}
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          files: build/libs/*
+          prerelease: false
+      - name: Upload jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: Folia
+          path: build/libs/*
